@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 public class Ranking_HTTP : MonoBehaviour
 {
+//https://stackoverflow.com/questions/36239705/serialize-and-deserialize-json-and-json-array-in-unity/36244111#36244111
     #region Buttons
     public void GoMenu()
     {
