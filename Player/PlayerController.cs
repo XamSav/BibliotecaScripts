@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField][Range(0,5)] private float _speed = 10f;
-    [SerializeField][Range(0,5)] private float _speed = 10f;
+    [SerializeField] [Range(0, 5)] private float _speed = 10f;
     [SerializeField] [Range(0, 10)] private float _jumpForce = 2;
+    private bool inGround = true;
     private Rigidbody2D _rb;
     private Animator _anim;
-     void Start()
+    void Start()
     {
-        _rb = transform.parent.GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
     }
     void Update()
@@ -21,15 +21,24 @@ public class PlayerController : MonoBehaviour
     }
     void Jump()
     {
-        if ((_y > 0.1 || _isJump)&& !_isJumping)
+        float y = Input.GetAxis("Vertical");
+        if (y > 0.1 && inGround)
         {
-            _isJump = false;
-            _rb.AddForce(new Vector2(0,_jumpForce), ForceMode2D.Impulse);
-            //PlaySound("Jump");
+            inGround = false;
+            _rb.AddForce(new Vector2(0, _jumpForce), ForceMode2D.Impulse);
         }
     }
-    void Move(){
-    float h = Input.GetAxis("Horizontal")
-      _rb.velocity = new Vector2(h * _speed, _rb.velocity.y);
+    void Move()
+    {
+        float h = Input.GetAxis("Horizontal");
+        _anim.SetFloat("Walk", h);
+        _rb.velocity = new Vector2(h * _speed, _rb.velocity.y);
+    }
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.CompareTag("Ground"))
+        {
+            inGround = true;
+        }
     }
 }
